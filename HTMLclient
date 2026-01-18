@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Client</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        #log { border: 1px solid #ccc; padding: 10px; height: 200px; overflow-y: auto; }
+        #msg { width: 300px; }
+    </style>
+</head>
+<body>
+
+<h2>WebSocket Client</h2>
+
+<div id="log"></div>
+
+<br>
+
+<input id="msg" placeholder="Type a message">
+<button onclick="sendMessage()">Send</button>
+
+<script>
+    // Replace this with your Railway WebSocket URL
+    const ws = new WebSocket("wss://your-app.up.railway.app");
+
+    const logBox = document.getElementById("log");
+
+    function log(text) {
+        const p = document.createElement("p");
+        p.textContent = text;
+        logBox.appendChild(p);
+        logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    ws.onopen = () => {
+        log("Connected to server");
+    };
+
+    ws.onmessage = (event) => {
+        log("Server: " + event.data);
+    };
+
+    ws.onclose = () => {
+        log("Connection closed");
+    };
+
+    ws.onerror = (err) => {
+        log("WebSocket error");
+        console.error(err);
+    };
+
+    function sendMessage() {
+        const text = document.getElementById("msg").value;
+        ws.send(text);
+        log("You: " + text);
+    }
+</script>
+
+</body>
+</html>
