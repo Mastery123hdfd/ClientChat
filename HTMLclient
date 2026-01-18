@@ -22,7 +22,8 @@
 
 <script>
     // Replace this with your Railway WebSocket URL
-    const ws = new WebSocket("wss://your-app.up.railway.app");
+    const ws = new WebSocket("wss://clientserver2026me.onrender.com");
+
 
     const logBox = document.getElementById("log");
 
