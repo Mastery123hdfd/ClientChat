@@ -21,7 +21,6 @@
 <button onclick="sendMessage()">Send</button>
 
 <script>
-    // Replace this with your Railway WebSocket URL
     const ws = new WebSocket("wss://clientserver2026me.onrender.com");
 
 
@@ -39,7 +38,7 @@
     };
 
     ws.onmessage = (event) => {
-        log("Server: " + event.data);
+        log("" + event.data);
     };
 
     ws.onclose = () => {
