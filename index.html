@@ -105,9 +105,10 @@
     };
 
     function sendMessage() {
-        document.getElementById("msg").value = "";
+        
         const text = document.getElementById("msg").value;
         ws.send(text);
+        document.getElementById("msg").value = "";
     }
 </script>
 
