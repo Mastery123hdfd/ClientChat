@@ -67,12 +67,13 @@
 <button id = "clickbutton" onclick="sendMessage()">Send</button>
 
 <script>
+    const logBox = document.getElementById("log");
     log("Connecting to server. This may take a long time if no one has chatted on the server for some time.");
     const ws = new WebSocket("wss://clientserver2026me.onrender.com");
     const box = document.getElementById("msg");
     const btn = document.getElementById("clickbutton");
 
-    const logBox = document.getElementById("log");
+    
 
     box.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
