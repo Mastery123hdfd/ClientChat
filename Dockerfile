@@ -8,6 +8,6 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY ./index.html /usr/share/nginx/html/index.html
 
 # Expose port 80 for the container
-EXPOSE 80
+EXPOSE 10000
 
 # Nginx runs automatically as the container's CMD
