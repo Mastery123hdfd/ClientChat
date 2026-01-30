@@ -69,7 +69,7 @@
 <script>
     const logBox = document.getElementById("log");
     log("Connecting to server. This may take a long time if no one has chatted on the server for some time.");
-    const ws = new WebSocket("wss://clientserver2026me.onrender.com");
+    const ws = new WebSocket("wss://clientserveriep2026me.onrender.com");
     const box = document.getElementById("msg");
     const btn = document.getElementById("clickbutton");
 
@@ -98,7 +98,8 @@
     };
 
     ws.onclose = () => {
-        log("Connection closed");
+        log("Connection closed. Retrying in 3 seconds...");
+        setTimeout(() => location.reload(), 3000);
     };
 
     ws.onerror = (err) => {
