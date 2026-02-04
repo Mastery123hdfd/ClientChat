@@ -105,7 +105,7 @@
                 return;
             }
             if(data.type == "strikemsg"){
-                logBox.removeChild(logBox.lastElementChild);
+                logBox.lastElementChild.remove();
             }
         } catch(e){
             log("" + event.data);
