@@ -101,9 +101,11 @@
         const data = JSON.parse(event.data);
 
             if (data.type === "clearHistory") {
-                chatHistory = [];
                 document.getElementById("log").innerHTML = "";
                 return;
+            }
+            if(data.type == "strikemsg"){
+                logBox.removeChild(logBox.lastElementChild);
             }
         } catch(e){
             log("" + event.data);
