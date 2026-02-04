@@ -98,7 +98,7 @@
 
     ws.onmessage = (event) => {
         try{
-        const data = JSON.parse(msg);
+        const data = JSON.parse(event.data);
 
             if (data.type === "clearHistory") {
                 chatHistory = [];
