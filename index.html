@@ -83,13 +83,7 @@
         }
     });
 
-    const data = JSON.parse(msg);
-
-    if (data.type === "clearHistory") {
-        chatHistory = [];
-        document.getElementById("log").innerHTML = "";
-        return;
-    }
+    
 
     function log(text) {
         const p = document.createElement("p");
@@ -103,7 +97,18 @@
     };
 
     ws.onmessage = (event) => {
-        log("" + event.data);
+        try{
+        const data = JSON.parse(msg);
+
+            if (data.type === "clearHistory") {
+                chatHistory = [];
+                document.getElementById("log").innerHTML = "";
+                return;
+            }
+        } catch(e){
+            log("" + event.data);
+        }
+        
     };
 
     ws.onclose = () => {
