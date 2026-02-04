@@ -67,6 +67,14 @@
 <button id = "clickbutton" onclick="sendMessage()">Send</button>
 
 <script>
+    const data = JSON.parse(msg);
+
+    if (data.type === "clearHistory") {
+        chatHistory = [];
+        document.getElementById("log").innerHTML = "";
+        return;
+    }
+
     const logBox = document.getElementById("log");
     log("Connecting to server. This may take a long time if no one has chatted on the server for some time.");
     const ws = new WebSocket("wss://clientserveriep2026me.onrender.com");
