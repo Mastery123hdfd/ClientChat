@@ -102,6 +102,7 @@
 
             if (data.type === "clearHistory") {
                 document.getElementById("log").innerHTML = "";
+                log("Chat cleared by admin");
                 return;
             }
             if(data.type == "strikemsg"){
