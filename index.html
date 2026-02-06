@@ -37,21 +37,22 @@
             font-size: 14px;
         }
 
-        #clickbutton {
-            padding: 8px 14px;
-            margin-left: 6px;
-            background: #2c2c2c;
-            color: rgb(255, 255, 255);
-            border: 1px solid #ffffff;
-            border-radius: 6px;
-            font-family: 'Comfortaa', sans-serif;
-            cursor: pointer;
-            box-shadow: inset 0 0 4px #202020;
+        .btn {
+    padding: 8px 14px;
+    margin-left: 6px;
+    background: #2c2c2c;
+    color: rgb(255, 255, 255);
+    border: 1px solid #ffffff;
+    border-radius: 6px;
+    font-family: 'Comfortaa', sans-serif;
+    cursor: pointer;
+    box-shadow: inset 0 0 4px #202020;
         }
 
-        #clickbutton:hover {
-            background: #555;
-        }
+.btn:hover {
+    background: #555;
+}
+
         .chat {
             color: white;
         }
@@ -73,9 +74,9 @@
 <br>
 
 <input id="msg" placeholder="Type a message">
-<button id = "clickbutton" onclick="sendMessage()">Send</button>
+<button id = "clickbutton" class = "btn" onclick="sendMessage()">Send</button>
 <input id = "prinput" placeholder = "Type in pr tag">
-<button id="prSwitch" onclick="changePR()">Change Private Room</button>
+<button id="prSwitch" class = "btn" onclick="changePR()">Change Private Room</button>
 
 <script>
     
@@ -97,9 +98,15 @@
     });
 
     function changePR(){
-        const tag = (JSON.stringify({type, changePrTag, v1: prin.value}));
-        ws.send(tag);
+        const packet = JSON.stringify({
+            type: "changePrTag",
+            v1: prin.value
+        });
         prtag = prin.value;
+
+        ws.send(packet);
+        prin.value = "";
+
     }
 
     function log(text, type = "chat") {
@@ -157,8 +164,8 @@
     function sendMessage() {
         
         const text = document.getElementById("msg").value;
-        const data = (JSON.stringify({msg: text, tag: prtag}));
-        ws.send(text);
+        const data = (JSON.stringify({type: "empty", msg: text, tag: prtag}));
+        ws.send(data);
         document.getElementById("msg").value = "";
     }
 </script>
