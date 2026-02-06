@@ -65,6 +65,8 @@
 
 <input id="msg" placeholder="Type a message">
 <button id = "clickbutton" onclick="sendMessage()">Send</button>
+<input id = "prinput" placeholder = "Type in pr tag">
+<button id="prSwitch" onclick="changePR()">Change Private Room</button>
 
 <script>
     
@@ -74,7 +76,8 @@
     const ws = new WebSocket("wss://clientserveriep2026me.onrender.com");
     const box = document.getElementById("msg");
     const btn = document.getElementById("clickbutton");
-
+    const prin = document.getElementById("prinput");
+    const prout = document.getElementById("prSwitch");
     
 
     box.addEventListener("keydown", function (event) {
@@ -83,7 +86,10 @@
         }
     });
 
-    
+    function changePr(){
+        const tag = (JSON.stringify({v1: prin.text}));
+        ws.send(tag);
+    }
 
     function log(text) {
         const p = document.createElement("p");
