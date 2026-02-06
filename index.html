@@ -97,7 +97,7 @@
     });
 
     function changePR(){
-        const tag = (JSON.stringify({v1: prin.value}));
+        const tag = (JSON.stringify({type, changePrTag, v1: prin.value}));
         ws.send(tag);
         prtag = prin.value;
     }
