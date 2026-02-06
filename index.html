@@ -52,6 +52,15 @@
         #clickbutton:hover {
             background: #555;
         }
+        .chat-line {
+            color: white;
+        }
+
+        .system-line {
+             color: #7ec8ff;
+            font-style: italic;
+        }
+
 
     </style>
 </head>
@@ -86,17 +95,23 @@
         }
     });
 
-    function changePr(){
-        const tag = (JSON.stringify({v1: prin.text}));
+    function changePR(){
+        const tag = (JSON.stringify({v1: prin.value}));
         ws.send(tag);
     }
 
-    function log(text) {
+    function log(text, type = "chat") {
         const p = document.createElement("p");
         p.textContent = text;
+        if (type === "system") {
+            p.classList.add("system-line");
+        } else {
+            p.classList.add("chat-line");
+        }
         logBox.appendChild(p);
         logBox.scrollTop = logBox.scrollHeight;
     }
+
 
     ws.onopen = () => {
         log("Connected to server");
@@ -106,16 +121,21 @@
         try{
         const data = JSON.parse(event.data);
 
-            if (data.type === "clearHistory") {
+            if (data.type == "clearHistory") {
                 document.getElementById("log").innerHTML = "";
                 log("Chat cleared by admin");
                 return;
             }
-            if(data.type == "strikemsg"){
+            else if(data.type == "strikemsg"){
                 logBox.lastElementChild.remove();
             }
+            else{
+                const output = data.message;
+                log("" + output, "chat");
+            }
+
         } catch(e){
-            log("" + event.data);
+            log("" + event.data, "system");
         }
         
     };
