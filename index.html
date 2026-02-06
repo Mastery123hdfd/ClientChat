@@ -52,11 +52,11 @@
         #clickbutton:hover {
             background: #555;
         }
-        .chat-line {
+        .chat {
             color: white;
         }
 
-        .system-line {
+        .system {
              color: #7ec8ff;
             font-style: italic;
         }
@@ -87,6 +87,7 @@
     const btn = document.getElementById("clickbutton");
     const prin = document.getElementById("prinput");
     const prout = document.getElementById("prSwitch");
+    let prtag = "main";
     
 
     box.addEventListener("keydown", function (event) {
@@ -98,15 +99,16 @@
     function changePR(){
         const tag = (JSON.stringify({v1: prin.value}));
         ws.send(tag);
+        prtag = prin.value;
     }
 
     function log(text, type = "chat") {
         const p = document.createElement("p");
         p.textContent = text;
         if (type === "system") {
-            p.classList.add("system-line");
+            p.classList.add("system");
         } else {
-            p.classList.add("chat-line");
+            p.classList.add("chat");
         }
         logBox.appendChild(p);
         logBox.scrollTop = logBox.scrollHeight;
@@ -127,7 +129,9 @@
                 return;
             }
             else if(data.type == "strikemsg"){
-                logBox.lastElementChild.remove();
+                const chats = logBox.querySelectorAll(".chat");
+                const lastChat = chats[chats.length - 1];
+                if (lastChat) lastChat.remove();
             }
             else{
                 const output = data.message;
@@ -153,6 +157,7 @@
     function sendMessage() {
         
         const text = document.getElementById("msg").value;
+        const data = (JSON.stringify({msg: text, tag: prtag}));
         ws.send(text);
         document.getElementById("msg").value = "";
     }
