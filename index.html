@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>WebSocket Client</title>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="VerdantLogo.png">
+
 
     <style>
         body {
@@ -164,7 +166,7 @@
     function sendMessage() {
         
         const text = document.getElementById("msg").value;
-        if(text == ""){
+        if(text.trim() == ""){
             return;
         }
         const data = (JSON.stringify({type: "empty", msg: text, tag: prtag}));
