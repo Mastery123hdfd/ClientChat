@@ -164,6 +164,9 @@
     function sendMessage() {
         
         const text = document.getElementById("msg").value;
+        if(text == ""){
+            return;
+        }
         const data = (JSON.stringify({type: "empty", msg: text, tag: prtag}));
         ws.send(data);
         document.getElementById("msg").value = "";
