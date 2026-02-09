@@ -93,6 +93,10 @@
     const btn = document.getElementById("clickbutton");
     const prin = document.getElementById("prinput");
     const prout = document.getElementById("prSwitch");
+    const userin = document.getElementById("usernameIn");
+    const passin = document.getElementById("passIn);
+    const loginbutton = document.getElementById("loginButton");
+    
     let prtag = "main";
     
 
@@ -113,7 +117,10 @@
         prin.value = "";
 
     }
-    function InitLogin(user, pass){
+    function InitLogin(){
+        Login(userin.value, passin.value);
+    }
+    function Login(user, pass){
         LoginPacket = (JSON.stringify({
             type: login,
             msg:null,
