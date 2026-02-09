@@ -79,6 +79,9 @@
 <button id = "clickbutton" class = "btn" onclick="sendMessage()">Send</button>
 <input id = "prinput" class = "inputbox" placeholder = "Type in pr tag">
 <button id="prSwitch" class = "btn" onclick="changePR()">Change Private Room</button>
+    
+<br>
+    
 <input id = "usernameIn" class = "inputbox" placeholder = "Username">
 <input id = "passIn" class = "inputbox" placeholder = "Password">
 <button id="loginButton" class = "btn" onclick = "InitLogin()">Login - WORK IN PROGRESS</button>
@@ -94,7 +97,7 @@
     const prin = document.getElementById("prinput");
     const prout = document.getElementById("prSwitch");
     const userin = document.getElementById("usernameIn");
-    const passin = document.getElementById("passIn);
+    const passin = document.getElementById("passIn");
     const loginbutton = document.getElementById("loginButton");
     
     let prtag = "main";
@@ -122,7 +125,7 @@
     }
     function Login(user, pass){
         LoginPacket = (JSON.stringify({
-            type: login,
+            type: "login",
             msg:null,
             tag:null,
             v1:user,
