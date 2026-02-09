@@ -79,6 +79,9 @@
 <button id = "clickbutton" class = "btn" onclick="sendMessage()">Send</button>
 <input id = "prinput" class = "inputbox" placeholder = "Type in pr tag">
 <button id="prSwitch" class = "btn" onclick="changePR()">Change Private Room</button>
+<input id = "usernameIn" class = "inputbox" placeholder = "Username">
+<input id = "passIn" class = "inputbox" placeholder = "Password">
+<button id="loginButton" class = "btn" onclick = "InitLogin()">Login - WORK IN PROGRESS</button>
 
 <script>
     
@@ -109,6 +112,16 @@
         ws.send(packet);
         prin.value = "";
 
+    }
+    function InitLogin(user, pass){
+        LoginPacket = (JSON.stringify({
+            type: login,
+            msg:null,
+            tag:null,
+            v1:user,
+            v2:pass
+        }));
+        ws.send(LoginPack);
     }
 
     function log(text, type = "chat") {
