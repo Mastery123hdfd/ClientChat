@@ -166,6 +166,9 @@
                 const lastChat = chats[chats.length - 1];
                 if (lastChat) lastChat.remove();
             }
+            else if(data.type == "sessionToken"){
+                const token = data.tokenid;
+            }
             else{
                 const output = data.message;
                 log("" + output, "chat");
