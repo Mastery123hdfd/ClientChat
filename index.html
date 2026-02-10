@@ -141,6 +141,13 @@
             p.classList.add("chat");
         }
         logBox.appendChild(p);
+        const scrollCheck = logBox.scrollHeight - logBox.scrollTop - logBox.clientHeight < 100;
+
+        if (scrollCheck) {
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+
     }
     function Login(user, pass){
         LoginPacket = (JSON.stringify({
