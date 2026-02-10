@@ -111,15 +111,6 @@
         }
         
     }
-    
-    if(token && firstlogin){
-        data = (JSON.stringify({
-            type:"sessionrestart",
-            token:token
-        }));
-        ws.send(data);
-    }
-
     box.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
             btn.click();   
@@ -170,6 +161,13 @@
 
     ws.onopen = () => {
         log("Connected to server");
+        const token = localStorage.getItem("sessionToken");
+        if (token) {
+            ws.send(JSON.stringify({
+                type: "sessionrestart",
+                token: token
+            }));
+        }
     };
 
     ws.onmessage = (event) => {
