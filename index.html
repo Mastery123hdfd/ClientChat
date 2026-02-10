@@ -138,20 +138,8 @@
 
     }
    
-    function Login(user, pass){
-        LoginPacket = (JSON.stringify({
-            type: "login",
-            msg:null,
-            tag:null,
-            v1:user,
-            v2:pass
-        }));
-        ws.send(LoginPacket);
-    }
-    function InitLogin(){
-        Login(userin.value, passin.value);
-        firstlogin=false;
-    }
+    
+    
     function log(text, type = "chat") {
         const p = document.createElement("p");
         p.textContent = text;
@@ -162,6 +150,21 @@
         }
         logBox.appendChild(p);
         logBox.scrollTop = logBox.scrollHeight;
+    }
+    function Login(user, pass){
+        LoginPacket = (JSON.stringify({
+            type: "login",
+            msg:null,
+            tag:null,
+            v1:user,
+            v2:pass
+        }));
+        log("LoginSent");
+        ws.send(LoginPacket);
+    }
+    function InitLogin(){
+        Login(userin.value, passin.value);
+        firstlogin=false;
     }
 
 
