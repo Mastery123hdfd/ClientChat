@@ -196,10 +196,9 @@
                 return;
             }
             else if(data.type == "strikemsg"){
-                const messages = logBox.querySelectorAll("[data-chat='true']");
-                const last = messages[messages.length - 1]; 
-                if (last) last.remove();
-                return;
+                const chats = logBox.querySelectorAll(".chat");
+                const lastChat = chats[chats.length - 1];
+                if (lastChat) lastChat.remove();
             }
             else if(data.type == "sessionToken"){
                 token = data.tokenid;
