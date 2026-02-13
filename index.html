@@ -167,6 +167,8 @@
 
 
     ws.onopen = () => {
+        console.log("CLIENT: ws.onopen fired");
+
         log("Connected to server");
         const token = localStorage.getItem("sessionToken");
         if (token) {
