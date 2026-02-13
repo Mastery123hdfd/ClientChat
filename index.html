@@ -140,6 +140,7 @@
             p.classList.add("system");
         } else {
             p.classList.add("chat");
+            p.dataset.chat = "true";
         }
         logBox.appendChild(p);
         const scrollCheck = logBox.scrollHeight - logBox.scrollTop - logBox.clientHeight < 100;
@@ -195,9 +196,10 @@
                 return;
             }
             else if(data.type == "strikemsg"){
-                const chats = logBox.querySelectorAll(".chat");
-                const lastChat = chats[chats.length - 1];
-                if (lastChat) lastChat.remove();
+                const messages = logBox.querySelectorAll("[data-chat='true']");
+                const last = messages[messages.length - 1]; 
+                if (last) last.remove();
+                return;
             }
             else if(data.type == "sessionToken"){
                 token = data.tokenid;
