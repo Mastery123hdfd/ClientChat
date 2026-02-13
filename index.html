@@ -190,6 +190,10 @@
                 log("Chat cleared by admin");
                 return;
             }
+            if(data.type == "clearHistoryChatless"{
+                document.getElementById("log").innerHTML = "";
+                return;
+            }
             else if(data.type == "strikemsg"){
                 const chats = logBox.querySelectorAll(".chat");
                 const lastChat = chats[chats.length - 1];
