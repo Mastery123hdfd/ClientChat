@@ -198,10 +198,15 @@
                 const chats = logBox.querySelectorAll(".chat");
                 const lastChat = chats[chats.length - 1];
                 if (lastChat) lastChat.remove();
+                return;
+            }
+            else if (data.type == "log"){
+                return;
             }
             else if(data.type == "sessionToken"){
                 token = data.tokenid;
                 localStorage.setItem("sessionToken", data.tokenid);
+                return;
             }
             else{
                 const output = data.message;
