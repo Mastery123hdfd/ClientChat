@@ -51,6 +51,10 @@
             box-shadow: inset 0 0 4px #202020;
         }
 
+        #filelog{
+            //Empty?
+        }
+
         .btn:hover {
             background: #555;
         }
@@ -75,7 +79,7 @@
 
 <br>
 <button id = "file" class = "btn" onclick = "fileSelector()">+</button>
-<input type = "file" id = "filebox" style = "display:none" multiple onchange="handleSel()">
+<input type = "file" id = "fileBox" style = "display:none" multiple onchange="handleSel()">
     
 <input id="msg" class = "inputbox" placeholder="Type a message">
 <button id = "clickbutton" class = "btn" onclick="sendMessage()">Send</button>
@@ -96,15 +100,20 @@
     const logBox = document.getElementById("log");
     
     const ws = new WebSocket("wss://clientservertestexp.onrender.com");
+    
     const box = document.getElementById("msg");
     const btn = document.getElementById("clickbutton");
+    
     const prin = document.getElementById("prinput");
     const prout = document.getElementById("prSwitch");
+    
     const userin = document.getElementById("usernameIn");
     const passin = document.getElementById("passIn");
     const loginbutton = document.getElementById("loginButton");
+    
     const fileIn = document.getElementById("file");
-    const fileBox = document.getElementyById("filebox");
+    const fileBox = document.getElementById("fileBox");
+    const filelog = document.getElementById("filelog");
     
     let prtag = "main";
     let firstlogin = true;
@@ -126,15 +135,24 @@
     });
 
     function fileSelector(){
-        filebox.click();
+        fileBox.click();
     }
     function handleSel(){
         const files = event.target.files;
         if (!files || files.length === 0) return;
         for(const file of files){
             filebuffer.push(file);
+            logFileName(file.name());
         }
+        
         return;
+    }
+
+    function logFileName(filename) {
+        const p = document.createElement("p");
+        p.textContent = filename;
+        p.classList.add("system");
+        filelog.appendChild(p);
     }
     
     function changePR(){
@@ -203,12 +221,12 @@
         const data = JSON.parse(event.data);
 
             if (data.type == "clearHistory") {
-                document.getElementById("log").innerHTML = "";
+                logBox.innerHTML = "";
                 log("Chat cleared by admin");
                 return;
             }
             if(data.type == "clearHistoryChatless"){
-                document.getElementById("log").innerHTML = "";
+                logBox.innerHTML = "";
                 return;
             }
             else if(data.type == "strikemsg"){
@@ -254,28 +272,37 @@
         }
         if(filebuffer.length !== 0){
             for(const file of filebuffer){
-                if(file.size >= 1513107200) return; // Limit size: 12.5mb.
-                if(file.type.startsWith("images/"){
+                if(file.size >= 13107200){log("File size limit: 12.5 mb", "system"); return;} // Limit size: 12.5mb.
+                if(file.type.startsWith("image/"){
+                    //imgmeta
                     ws.send(JSON.stringify({
-                        type: "imagefile",
+                        type: "imgmeta",
                         msg: file.name,
-                        tag:prtag,
-                        data: file
+                        v1: file.size,
+                        v2: file.type,
+                        tag:prtag
                     }));
+                    ws.send(await file.arrayBuffer());
                 } else{
+                    //regmeta
                     ws.send(JSON.stringify({
-                        type: "regfile",
+                        type: "regmeta",
                         msg: file.name,
-                        tag: prtag,
-                        data: file
+                        v1: file.size,
+                        v2: file.type,
+                        tag: prtag
                     }));
+                    ws.send(await file.arrayBuffer());
                 }
             }
+            // Clear filelog
+            filelog.innerHTML = "";
+            filebuffer = [];
         }
             
         const data = (JSON.stringify({type: "empty", msg: text, tag: prtag}));
         ws.send(data);
-        document.getElementById("msg").value = "image";
+        document.getElementById("msg").value = "";
     }
 </script>
 
