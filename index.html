@@ -52,7 +52,7 @@
         }
 
         #filelog{
-            //Empty?
+           display:none;
         }
 
         .btn:hover {
@@ -264,7 +264,7 @@
         console.error(err);
     };
 
-    function sendMessage() {
+    async function sendMessage() {
         
         const text = document.getElementById("msg").value;
         if(text.trim() == ""){
@@ -273,7 +273,7 @@
         if(filebuffer.length !== 0){
             for(const file of filebuffer){
                 if(file.size >= 13107200){log("File size limit: 12.5 mb", "system"); return;} // Limit size: 12.5mb.
-                if(file.type.startsWith("image/"){
+                if(file.type.startsWith("image/")){
                     //imgmeta
                     ws.send(JSON.stringify({
                         type: "imgmeta",
