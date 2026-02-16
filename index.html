@@ -74,7 +74,9 @@
 <div id="log"></div>
 
 <br>
-
+<button id = "file" class = "btn" onclick = "fileSelector()">+</button>
+<input type = "file" id = "filebox" style = "display:none" multiple onchange="handleSel()">
+    
 <input id="msg" class = "inputbox" placeholder="Type a message">
 <button id = "clickbutton" class = "btn" onclick="sendMessage()">Send</button>
 <input id = "prinput" class = "inputbox" placeholder = "Type in pr tag">
@@ -101,10 +103,15 @@
     const userin = document.getElementById("usernameIn");
     const passin = document.getElementById("passIn");
     const loginbutton = document.getElementById("loginButton");
+    const fileIn = document.getElementById("file");
+    const fileBox = document.getElementyById("filebox");
     
     let prtag = "main";
     let firstlogin = true;
     let token = null;
+
+    let filebuffer = [];
+    
     if(firstlogin){
         t = localStorage.getItem("sessionToken");
         if(t){
@@ -118,7 +125,18 @@
         }
     });
 
-
+    function fileSelector(){
+        filebox.click();
+    }
+    function handleSel(){
+        const files = event.target.files;
+        if (!files || files.length === 0) return;
+        for(const file of files){
+            filebuffer.push(file);
+        }
+        return;
+    }
+    
     function changePR(){
         const packet = JSON.stringify({
             type: "changePrTag",
@@ -234,9 +252,30 @@
         if(text.trim() == ""){
             return;
         }
+        if(filebuffer.length !== 0){
+            for(const file of filebuffer){
+                if(file.size >= 1513107200) return; // Limit size: 12.5mb.
+                if(file.type.startsWith("images/"){
+                    ws.send(JSON.stringify({
+                        type: "imagefile",
+                        msg: file.name,
+                        tag:prtag,
+                        data: file
+                    }));
+                } else{
+                    ws.send(JSON.stringify({
+                        type: "regfile",
+                        msg: file.name,
+                        tag: prtag,
+                        data: file
+                    }));
+                }
+            }
+        }
+            
         const data = (JSON.stringify({type: "empty", msg: text, tag: prtag}));
         ws.send(data);
-        document.getElementById("msg").value = "";
+        document.getElementById("msg").value = "image";
     }
 </script>
 
