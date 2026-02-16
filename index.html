@@ -183,9 +183,77 @@
         if (scrollCheck) {
             logBox.scrollTop = logBox.scrollHeight;
         }
-
-
     }
+    function logFile(buffer, type, name) {
+        const p = document.createElement("p");
+        p.classList.add("chat");
+
+        // Optional: show image preview if it's an image
+        if (type.startsWith("image/")) {
+            const blob = new Blob([buffer], { type: type });
+            const url = URL.createObjectURL(blob);
+
+            const img = document.createElement("img");
+            img.src = url;
+            img.alt = name;
+            img.style.maxWidth = "200px";
+            img.style.maxHeight = "200px";
+            img.style.display = "block";
+            img.style.marginBottom = "6px";
+
+            p.appendChild(img);
+
+            const btn = document.createElement("button");
+            btn.textContent = "Download";
+            btn.className = "btn";
+            btn.onclick = () => {
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = name;
+                a.style.display = "none";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                 URL.revokeObjectURL(url);
+            };
+
+            p.appendChild(btn);
+        } else {
+        // Non-image: just show filename and download button
+            const label = document.createElement("span");
+            label.textContent = name;
+            label.style.marginRight = "10px";
+
+            const btn = document.createElement("button");
+            btn.textContent = "⬇️";
+            btn.className = "btn";
+            btn.onclick = () => {
+              const blob = new Blob([buffer], { type: type });
+              const url = URL.createObjectURL(blob);
+
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = name;
+              a.style.display = "none";
+              document.body.appendChild(a);
+              a.click();
+             document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+            };
+
+            p.appendChild(label);
+            p.appendChild(btn);
+        }
+
+        logBox.appendChild(p);
+
+        const scrollCheck = logBox.scrollHeight - logBox.scrollTop - logBox.clientHeight < 100;
+        if (scrollCheck) {
+           logBox.scrollTop = logBox.scrollHeight;
+        }
+    }
+
+
     function Login(user, pass){
         LoginPacket = (JSON.stringify({
             type: "login",
@@ -216,11 +284,20 @@
         }
     };
 
+    let meta = null;
+
     ws.onmessage = (event) => {
         try{
         const data = JSON.parse(event.data);
 
-            if (data.type == "clearHistory") {
+            
+            if(meta !== null){
+                log("Received file: " + meta.name + " (" + meta.size + " bytes, " + meta.type + ")", "system");
+                logFile(data, meta.type, meta.name);
+                meta = null;
+
+            }
+            else if (data.type == "clearHistory") {
                 logBox.innerHTML = "";
                 log("Chat cleared by admin");
                 return;
@@ -241,6 +318,24 @@
             else if(data.type == "sessionToken"){
                 token = data.tokenid;
                 localStorage.setItem("sessionToken", data.tokenid);
+                return;
+            }
+            else if(data.type == "imgmeta"){
+                meta = {
+                    name: data.msg,
+                    size: data.size,
+                    type: data.type,
+                    isImg: true
+                };
+                return;
+            }
+            else if(data.type == "regmeta"){
+                meta = {
+                    name: data.msg,
+                    size: data.size,
+                    type: data.type,
+                    isImg: false
+                };
                 return;
             }
             else{
