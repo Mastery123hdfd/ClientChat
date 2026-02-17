@@ -78,8 +78,7 @@
 <div id="log"></div>
 
 <br>
-<button id = "file" class = "btn" onclick = "fileSelector()">+</button>
-<input type = "file" id = "fileBox" style = "display:none" multiple onchange="handleSel()">
+<!--<button id = "file" class = "btn" onclick = "fileSelector()">+</button>DIV HERE<input type = "file" id = "fileBox" style = "display:none" multiple onchange="handleSel()">-->
     
 <input id="msg" class = "inputbox" placeholder="Type a message">
 <button id = "clickbutton" class = "btn" onclick="sendMessage()">Send</button>
@@ -100,6 +99,8 @@
     const logBox = document.getElementById("log");
     
     const ws = new WebSocket("wss://clientservertestexp.onrender.com");
+
+    console.log("Socket connected");
     
     const box = document.getElementById("msg");
     const btn = document.getElementById("clickbutton");
