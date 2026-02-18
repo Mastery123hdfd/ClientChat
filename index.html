@@ -52,9 +52,10 @@
         }
 
         #filelog{
-           display: block;
-            padding: 6px;
-            margin-top: 8px;
+
+            padding: 10px;
+            color: white;
+            overflow-y: auto;
         }
 
         .btn:hover {
@@ -87,6 +88,8 @@
 <button id = "clickbutton" class = "btn" onclick="sendMessage()">Send</button>
 <input id = "prinput" class = "inputbox" placeholder = "Type in pr tag">
 <button id="prSwitch" class = "btn" onclick="changePR()">Change Private Room</button>
+
+<div id ="filelog"></div>
     
 <br>
 <hr style="margin: 20px 0; border: 1px solid #444;">
@@ -117,9 +120,6 @@
     const fileBox = document.getElementById("fileBox");
     const filelog = document.getElementById("filelog");
 
-    filelog.style.display = "block";
-    filelog.style.border = "2px solid red";
-    filelog.style.minHeight = "40px";
     
     let prtag = "main";
     let firstlogin = true;
