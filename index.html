@@ -78,7 +78,8 @@
 <div id="log"></div>
 
 <br>
-<!--<button id = "file" class = "btn" onclick = "fileSelector()">+</button>DIV HERE<input type = "file" id = "fileBox" style = "display:none" multiple onchange="handleSel()">-->
+<button id = "file" class = "btn" onclick = "fileSelector()">+</button>
+<input type = "file" id = "fileBox" style = "display:none" multiple onchange="handleSel(event)">
     
 <input id="msg" class = "inputbox" placeholder="Type a message">
 <button id = "clickbutton" class = "btn" onclick="sendMessage()">Send</button>
@@ -136,16 +137,16 @@
     function fileSelector(){
         fileBox.click();
     }
-    function handleSel(){
-        const files = event.target.files;
+    function handleSel(e) {
+        const files = e.target.files;
         if (!files || files.length === 0) return;
-        for(const file of files){
+
+        for (const file of files) {
             filebuffer.push(file);
             logFileName(file.name);
         }
-        
-        return;
     }
+
 
     function logFileName(filename) {
         const p = document.createElement("p");
