@@ -52,7 +52,9 @@
         }
 
         #filelog{
-           display:none;
+           display: block;
+            padding: 6px;
+            margin-top: 8px;
         }
 
         .btn:hover {
@@ -114,6 +116,10 @@
     const fileIn = document.getElementById("file");
     const fileBox = document.getElementById("fileBox");
     const filelog = document.getElementById("filelog");
+
+    filelog.style.display = "block";
+    filelog.style.border = "2px solid red";
+    filelog.style.minHeight = "40px";
     
     let prtag = "main";
     let firstlogin = true;
@@ -139,8 +145,12 @@
     }
     function handleSel(e) {
         const files = e.target.files;
+        
         if (!files || files.length === 0) return;
 
+        console.log("handleSel fired");
+        console.log("filelog element:", filelog);
+        
         for (const file of files) {
             filebuffer.push(file);
             logFileName(file.name);
