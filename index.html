@@ -387,7 +387,9 @@
                         v2: file.type,
                         tag:prtag
                     }));
+                    console.log("Image Metadata Sent!");
                     ws.send(await file.arrayBuffer());
+                    console.log("IMAGE sent!");
                 } else{
                     //regmeta
                     ws.send(JSON.stringify({
@@ -397,7 +399,9 @@
                         v2: file.type,
                         tag: prtag
                     }));
+                    console.log("Non-image Metadata Sent!");
                     ws.send(await file.arrayBuffer());
+                    console.log("NON-IMAGE sent!!");
                 }
             }
             // Clear filelog
