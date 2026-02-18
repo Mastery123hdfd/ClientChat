@@ -388,7 +388,7 @@
                         tag:prtag
                     }));
                     console.log("Image Metadata Sent!");
-                    ws.send(await filebuff, { binary: true });
+                    ws.send(await filebuffer, { binary: true });
                     console.log("IMAGE sent!");
                 } else{
                     //regmeta
@@ -400,7 +400,7 @@
                         tag: prtag
                     }));
                     console.log("Non-image Metadata Sent!");
-                    ws.send(await filebuff, { binary: true });
+                    ws.send(await filebuffer, { binary: true });
                     console.log("NON-IMAGE sent!!");
                 }
             }
