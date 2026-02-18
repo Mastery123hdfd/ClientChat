@@ -332,18 +332,18 @@
             }
             else if(data.type == "imgmeta"){
                 meta = {
-                    name: data.msg,
-                    size: data.v1,
-                    type: data.v2,
+                    name: data.name,
+                    size: data.size,
+                    type: data.mimetype,
                     isImg: true
                 };
                 return;
             }
             else if(data.type == "regmeta"){
                 meta = {
-                    name: data.msg,
+                    name: data.name,
                     size: data.size,
-                    type: data.type,
+                    type: data.mimetype,
                     isImg: false
                 };
                 return;
