@@ -376,7 +376,7 @@
     async function sendMessage() {
         
         const text = document.getElementById("msg").value;
-        if(text.trim() == ""){
+        if(text.trim() == "" && filebuffer.length == 0){
             return;
         }
         if(filebuffer.length !== 0){
@@ -392,7 +392,7 @@
                         tag:prtag
                     }));
                     console.log("Image Metadata Sent!");
-                    ws.send(await filebuffer, { binary: true });
+                    ws.send(await file.arraybuffer, {isBinary = true});
                     console.log("IMAGE sent!");
                 } else{
                     //regmeta
@@ -404,7 +404,7 @@
                         tag: prtag
                     }));
                     console.log("Non-image Metadata Sent!");
-                    ws.send(await filebuffer, { binary: true });
+                    ws.send(await file.arraybuffer, {isBinary = true});
                     console.log("NON-IMAGE sent!!");
                 }
             }
