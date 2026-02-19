@@ -303,10 +303,11 @@
 
             
             if(meta !== null){
-                log("Received file: " + meta.name + " (" + meta.size + " bytes, " + meta.type + ")", "system");
+                console.log("Received file: " + meta.name + " (" + meta.size + " bytes, " + meta.type + ")");
+                
                 logFile(data, meta.type, meta.name);
                 meta = null;
-
+                
             }
             else if (data.type == "clearHistory") {
                 logBox.innerHTML = "";
@@ -338,6 +339,7 @@
                     type: data.mimetype,
                     isImg: true
                 };
+                console.log("Image meta received");
                 return;
             }
             else if(data.type == "regmeta"){
@@ -347,6 +349,7 @@
                     type: data.mimetype,
                     isImg: false
                 };
+                console.log("Non-image meta received");
                 return;
             }
             else{
