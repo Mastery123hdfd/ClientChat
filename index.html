@@ -120,6 +120,7 @@
     const fileBox = document.getElementById("fileBox");
     const filelog = document.getElementById("filelog");
 
+    ws.binaryType = "arraybuffer";
     
     let prtag = "main";
     let firstlogin = true;
@@ -280,7 +281,7 @@
         firstlogin=false;
     }
 
-    ws.binaryType = "arraybuffer";
+    
     ws.onopen = () => {
         console.log("CLIENT: ws.onopen fired");
 
