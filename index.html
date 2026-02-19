@@ -200,8 +200,8 @@
 
         // Optional: show image preview if it's an image
         if (type.startsWith("image/")) {
-            const blob = new Blob([buffer], { type: type });
-            const url = URL.createObjectURL(blob);
+            const arrbuff = new Blob([buffer], { type: type });
+            const url = URL.createObjectURL(arrbuff);
 
             const img = document.createElement("img");
             img.src = url;
