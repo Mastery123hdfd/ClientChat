@@ -302,13 +302,18 @@
         const data = JSON.parse(event.data);
 
             
-            if(meta !== null){
-                console.log("Received file: " + meta.name + " (" + meta.size + " bytes, " + meta.type + ")");
-                
-                logFile(data, meta.type, meta.name);
+            if (event.data instanceof ArrayBuffer) {
+                if (meta === null) {
+                    console.log("Binary received but no meta!");
+                    return;
+                }
+
+                logFile(event.data, meta.type, meta.name);
                 meta = null;
-                
+                return;
             }
+
+
             else if (data.type == "clearHistory") {
                 logBox.innerHTML = "";
                 log("Chat cleared by admin");
