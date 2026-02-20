@@ -299,8 +299,6 @@
 
     ws.onmessage = (event) => {
         try{
-        const data = JSON.parse(event.data);
-
             
             if (event.data instanceof ArrayBuffer) {
                 if (meta === null) {
@@ -313,8 +311,9 @@
                 return;
             }
 
-
-            else if (data.type == "clearHistory") {
+            const data = JSON.parse(event.data);
+            
+            if (data.type == "clearHistory") {
                 logBox.innerHTML = "";
                 log("Chat cleared by admin");
                 return;
