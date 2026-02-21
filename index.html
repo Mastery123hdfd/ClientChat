@@ -312,7 +312,7 @@
             }
 
             const data = JSON.parse(event.data);
-            
+
             if (data.type == "clearHistory") {
                 logBox.innerHTML = "";
                 log("Chat cleared by admin");
@@ -398,6 +398,7 @@
                     console.log("Image Metadata Sent!");
                     ws.send(await file.arrayBuffer());
                     console.log("IMAGE sent!");
+                    logFile(await file.arrayBuffer(), file.type, file.name);
                 } else{
                     //regmeta
                     ws.send(JSON.stringify({
@@ -410,6 +411,7 @@
                     console.log("Non-image Metadata Sent!");
                     ws.send(await file.arrayBuffer());
                     console.log("NON-IMAGE sent!!");
+                    logFile(await file.arrayBuffer(), file.type, file.name);
                 }
             }
             // Clear filelog
