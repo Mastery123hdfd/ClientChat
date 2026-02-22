@@ -418,7 +418,9 @@
             filelog.innerHTML = "";
             filebuffer = [];
         }
-            
+        if(test.trim() == ""){
+            return;
+        }
         const data = (JSON.stringify({type: "empty", msg: text, tag: prtag}));
         ws.send(data);
         document.getElementById("msg").value = "";
