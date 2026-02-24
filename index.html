@@ -406,13 +406,12 @@
                             v2: file.type,
                             tag:prtag
                         }
+                        
                     ));
+                    stackfileBuffer.push(await file.arrayBuffer());
                     if(next){
                         ws.send(stackBuffer.pop());
                         console.log("Image Metadata Sent!");
-                    }
-                    stackfileBuffer.push(await file.arrayBuffer());
-                    if(next){
                         ws.send(stackfileBuffer.pop());
                         console.log("IMAGE sent!");
                         next = false
@@ -427,25 +426,22 @@
                         v2: file.type,
                         tag: prtag
                     }));
+                    stackfileBuffer.push(await file.arrayBuffer());
                     if(next){
                         ws.send(stackBuffer.pop());
                         console.log("Non-image Metadata Sent!");
-                    }
-                    
-                    stackfileBuffer.push(await file.arrayBuffer());
-
-                    if(next){
                         ws.send(stackfileBuffer.pop());
                         console.log("NON-IMAGE sent!!");
                         next = false;
+                        
                     }
                    
                 }
             }
-            next = true;
             // Clear filelog
             filelog.innerHTML = "";
             filebuffer = [];
+            next = true;
         }
         if(text.trim() == ""){
             return;
