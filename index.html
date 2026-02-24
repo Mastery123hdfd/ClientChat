@@ -312,9 +312,11 @@
                 logFile(event.data, meta.type, meta.name);
                 meta = null;
 
-                if(stackBuffer !== [] && stackfileBuffer !== []){
+                if(stackBuffer.length !== 0){
                     ws.send(stackBuffer.pop());
                     console.log("META SENT");
+                }
+                if(stackfileBufer.length !== 0){
                     ws.send(stackfileBuffer.pop());
                     console.log("DATA SENT");
                 }
