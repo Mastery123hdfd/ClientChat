@@ -127,6 +127,8 @@
     let token = null;
 
     let filebuffer = [];
+    let stackBuffer = [];
+    let stackfileBuffer = [];
     
     if(firstlogin){
         t = localStorage.getItem("sessionToken");
@@ -189,7 +191,7 @@
             p.classList.add("chat");
         }
         logBox.appendChild(p);
-        const scrollCheck = logBox.scrollHeight - logBox.scrollTop - logBox.clientHeight < 100;
+        const scrollCheck = logBox.scrollHeight - logBox.scrollTop - logBox.clientHeight < 600;
 
         if (scrollCheck) {
             logBox.scrollTop = logBox.scrollHeight;
@@ -258,7 +260,7 @@
 
         logBox.appendChild(p);
 
-        const scrollCheck = logBox.scrollHeight - logBox.scrollTop - logBox.clientHeight < 100;
+        const scrollCheck = logBox.scrollHeight - logBox.scrollTop - logBox.clientHeight < 1000;
         if (scrollCheck) {
            logBox.scrollTop = logBox.scrollHeight;
         }
@@ -296,6 +298,7 @@
     };
 
     let meta = null;
+    let next = true;
 
     ws.onmessage = (event) => {
         try{
@@ -308,6 +311,14 @@
 
                 logFile(event.data, meta.type, meta.name);
                 meta = null;
+
+                if(stackBuffer !== [] && stackfileBuffer !== []){
+                    ws.send(stackBuffer.pop());
+                    console.log("META SENT");
+                    ws.send(stackfileBuffer.pop());
+                    console.log("DATA SENT");
+                }
+                
                 return;
             }
 
@@ -385,32 +396,51 @@
                 if(file.size >= 13107200){log("File size limit: 12.5 mb", "system"); return;} // Limit size: 12.5mb.
                 if(file.type.startsWith("image/")){
                     //imgmeta
-                    ws.send(JSON.stringify({
-                        type: "imgmeta",
-                        msg: file.name,
-                        v1: file.size,
-                        v2: file.type,
-                        tag:prtag
-                    }));
-                    console.log("Image Metadata Sent!");
-                    ws.send(await file.arrayBuffer());
-                    console.log("IMAGE sent!");
+                    stackBuffer.push(JSON.stringify(
+                        {
+                            type: "imgmeta",
+                            msg: file.name,
+                            v1: file.size,
+                            v2: file.type,
+                            tag:prtag
+                        }
+                    ));
+                    if(next){
+                        ws.send(stackBuffer.pop());
+                        console.log("Image Metadata Sent!");
+                    }
+                    stackfileBuffer.push(await file.arrayBuffer());
+                    if(next){
+                        ws.send(stackfileBuffer.pop());
+                        console.log("IMAGE sent!");
+                        next = false
+                    }
                     
                 } else{
                     //regmeta
-                    ws.send(JSON.stringify({
+                    stackBuffer.push(JSON.stringify({
                         type: "regmeta",
                         msg: file.name,
                         v1: file.size,
                         v2: file.type,
                         tag: prtag
                     }));
-                    console.log("Non-image Metadata Sent!");
-                    ws.send(await file.arrayBuffer());
-                    console.log("NON-IMAGE sent!!");
+                    if(next){
+                        ws.send(stackBuffer.pop());
+                        console.log("Non-image Metadata Sent!");
+                    }
+                    
+                    stackfileBuffer.push(await file.arrayBuffer());
+
+                    if(next){
+                        ws.send(stackfileBuffer.pop());
+                        console.log("NON-IMAGE sent!!");
+                        next = false;
+                    }
                    
                 }
             }
+            next = true;
             // Clear filelog
             filelog.innerHTML = "";
             filebuffer = [];
