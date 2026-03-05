@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+L<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -104,7 +104,7 @@
 
     const logBox = document.getElementById("log");
     
-    const ws = new WebSocket("wss://clientserveriep2026me.onrender.com");
+    const ws = new WebSocket("wss://clientchattest.onrender.com");
     
     const box = document.getElementById("msg");
     const btn = document.getElementById("clickbutton");
@@ -275,7 +275,7 @@
             v1:user,
             v2:pass
         }));
-        log("LoginSent");
+        log("LoginSent", "system");
         ws.send(LoginPacket);
     }
     function InitLogin(){
