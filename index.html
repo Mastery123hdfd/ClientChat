@@ -238,7 +238,7 @@ L<!DOCTYPE html>
             label.style.marginRight = "10px";
 
             const btn = document.createElement("button");
-            btn.textContent = "|V|";
+            btn.textContent = "Download";
             btn.className = "btn";
             btn.onclick = () => {
               const blob = new Blob([buffer], { type: type });
@@ -308,18 +308,19 @@ L<!DOCTYPE html>
                     console.log("Binary received but no meta!");
                     return;
                 }
+                console.log("Data Received!!!");
 
                 logFile(event.data, meta.type, meta.name);
                 meta = null;
 
-                if(stackBuffer.length !== 0){
+                /*if(stackBuffer.length !== 0){
                     ws.send(stackBuffer.pop());
                     console.log("META SENT");
                 }
                 if(stackfileBufer.length !== 0){
                     ws.send(stackfileBuffer.pop());
                     console.log("DATA SENT");
-                }
+                }*/
                 
                 return;
             }
