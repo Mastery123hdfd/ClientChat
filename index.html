@@ -377,7 +377,8 @@ L<!DOCTYPE html>
             
             if (event.data instanceof ArrayBuffer) {
                 if (meta === null) {
-                    console.log("Binary received but no meta!");
+                    console.log("Binary received but no meta! The file has been converted to a .bin file, please ask the sender for the file extension.");
+                    logFile(event.data, "application/octet-stream", "unknown");
                     return;
                 }
                 console.log("Data Received!!!");
