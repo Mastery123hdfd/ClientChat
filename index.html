@@ -399,6 +399,12 @@ L<!DOCTYPE html>
             }
 
             const data = JSON.parse(event.data);
+            if(data.type === "Poll"){
+                console.log("Poll received!");
+                const poll = data.polldata;
+                console.log("Poll quesiton is: " + poll.question);
+                
+            }
 
             if (data.type == "clearHistory") {
                 logBox.innerHTML = "";
