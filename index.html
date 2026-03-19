@@ -70,6 +70,34 @@ L<!DOCTYPE html>
              color: #7ec8ff;
             font-style: italic;
         }
+        .dropup-menu {
+            position: absolute;
+            bottom: 60px; /* raises it above the + button */
+            left: 20px;   /* adjust to match your + button position */
+            background: #2c2c2c;
+            border: 1px solid #ffffff;
+            border-radius: 6px;
+            box-shadow: 0 0 6px #000;
+            padding: 6px 0;
+            display: none;
+            z-index: 999;
+        }
+
+        .dropup-item {
+            background: #2c2c2c;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            width: 100%;
+            text-align: left;
+            font-family: 'Comfortaa', sans-serif;
+            cursor: pointer;
+        }
+
+        .dropup-item:hover {
+            background: #555;
+        }
+
 
 
     </style>
@@ -81,7 +109,12 @@ L<!DOCTYPE html>
 <div id="log"></div>
 
 <br>
-<button id = "file" class = "btn" onclick = "fileSelector()">+</button>
+<button id = "file" class = "btn" onclick = "togglePlusMenu()">+</button>
+<div id="plusMenu" class="dropup-menu">
+    <button class="dropup-item" onclick="openPollCreator()">Create Poll</button>
+    <button class="dropup-item" onclick="fileSelector()">Upload File</button>
+</div>
+
 <input type = "file" id = "fileBox" style = "display:none" onchange="handleSel(event)">
     
 <input id="msg" class = "inputbox" placeholder="Type a message">
@@ -146,6 +179,40 @@ L<!DOCTYPE html>
     function fileSelector(){
         fileBox.click();
     }
+    function togglePlusMenu() {
+        const menu = document.getElementById("plusMenu");
+        menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+
+    
+        document.addEventListener("click", (e) => {
+            const menu = document.getElementById("plusMenu");
+            const plusBtn = document.getElementById("file");
+
+            if (!menu.contains(e.target) && e.target !== plusBtn) {
+                menu.style.display = "none";
+            }
+        });
+    function openPollCreator() {
+    
+        const title = prompt("Poll question:");
+        if (!title) return;
+
+        const options = prompt("Options (comma separated):");
+        if (!options) return;
+
+        const timer = prompt("Timer in seconds:");
+        if (!timer) return;
+
+        ws.send(JSON.stringify({
+            type: "PollCreate",
+            v1: title,
+            v2: options.split(",").map(o => o.trim()),
+            v3: timer
+        }));
+    }
+
+
     function handleSel(e) {
         const files = e.target.files;
         
@@ -268,6 +335,8 @@ L<!DOCTYPE html>
 
 
     function Login(user, pass){
+        if(userin.value.length>400) return;
+        if(passin.value.length>400) return;
         LoginPacket = (JSON.stringify({
             type: "login",
             msg:null,
@@ -276,6 +345,8 @@ L<!DOCTYPE html>
             v2:pass
         }));
         log("LoginSent", "system");
+        passin.value = "";
+        userin.value = "";
         ws.send(LoginPacket);
     }
     function InitLogin(){
@@ -445,6 +516,10 @@ L<!DOCTYPE html>
             next = true;
         }
         if(text.trim() == ""){
+            return;
+        }
+        if(text.length >= 1000){
+            log("Your message is too large!");
             return;
         }
         const data = (JSON.stringify({type: "empty", msg: text, tag: prtag}));
