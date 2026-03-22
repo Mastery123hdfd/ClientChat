@@ -265,6 +265,61 @@ L<!DOCTYPE html>
             logBox.scrollTop = logBox.scrollHeight;
         }
     }
+    function logPoll(PollObject){
+        const opmap = PollObject.OptionMap;
+        const keyarray = opmap.keys();
+        const p = document.createElement("p");
+
+        let totalvotes = k;
+
+        p.id = "poll-" + PollObject.msgid;
+        p.classList.add("chat");
+        for(key of keyarray){
+            totalvotes += opmap.get(key).optionvotes;
+        }
+        for(key of keyarray){
+            let btn = document.createElement("button");
+            const option = opmap.get(key)
+            btn.textContent = "" + key + ". " + option.optionname + "| " + option.optionvotes + " votes| - " + ((votes / totalVotes) * 100).toFixed(1) + "%";
+            btn.className = "btn";
+            p.appendChild(btn);
+        }
+    }
+    function updatePoll(PollObject) {
+        const pollDiv = document.getElementById("poll-" + PollObject.msgid);
+        if (!pollDiv) return; // poll not in DOM yet
+
+        const opmap = PollObject.OptionMap;
+        const keyarray = Array.from(opmap.keys());
+
+        // Recalculate total votes
+        let totalVotes = 0;
+        for (const key of keyarray) {
+            totalVotes += opmap.get(key).optionvotes;
+        }
+
+        // Update each button inside the poll
+        const buttons = pollDiv.querySelectorAll("button");
+
+        let i = 0;
+        for (const key of keyarray) {
+            const option = opmap.get(key);
+            const votes = option.optionvotes;
+
+            const percent = totalVotes === 0
+                ? 0
+                : ((votes / totalVotes) * 100).toFixed(1);
+
+            const btn = buttons[i];
+            if (btn) {
+                btn.textContent =
+            `${key}. ${option.optionname} | ${votes} votes | ${percent}%`;
+            }
+
+            i++;
+        }
+    }
+
     function logFile(buffer, type, name) {
         const p = document.createElement("p");
         p.classList.add("chat");
@@ -409,7 +464,11 @@ L<!DOCTYPE html>
                 console.log("Poll received!");
                 const poll = data.polldata;
                 console.log("Poll quesiton is: " + poll.question);
-                
+                return;
+                logPoll(event.data);
+            }
+            if(data.type ==="PollUpdate"){
+                logPoll(event.data);
             }
 
             if (data.type == "clearHistory") {
@@ -456,7 +515,7 @@ L<!DOCTYPE html>
                 return;
             }
             else{
-                
+                const output = data.message;
                 log("" + output, "chat");
             }
 
