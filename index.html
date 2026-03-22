@@ -373,6 +373,12 @@ L<!DOCTYPE html>
     let next = true;
 
     ws.onmessage = (event) => {
+        console.log(typeof event);
+        try{
+        console.log(JSON.stringify(event));
+        }catch(e){
+            console.log(e);
+        }
         try{
             
             if (event.data instanceof ArrayBuffer) {
@@ -450,7 +456,7 @@ L<!DOCTYPE html>
                 return;
             }
             else{
-                const output = data.message;
+                
                 log("" + output, "chat");
             }
 
