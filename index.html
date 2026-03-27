@@ -152,6 +152,9 @@ L<!DOCTYPE html>
     
     const fileBox = document.getElementById("fileBox");
     const filelog = document.getElementById("filelog");
+    let boole = false;
+    let bool1 = false;
+    let bool2 = false;
 
     ws.binaryType = "arraybuffer";
     
@@ -195,14 +198,17 @@ L<!DOCTYPE html>
             }
         });
     function openPollCreator() {
-    
+        
         const title = prompt("Poll question:");
+        boole = true;
         if (!title) return;
 
         const options = prompt("Options (comma separated):");
+        bool1 = true;
         if (!options) return;
 
-        const timer = prompt("Timer in seconds:");
+        const timer = prompt("Timer in minutes:");
+        bool2= true;
         if (!timer) return;
 
         ws.send(JSON.stringify({
@@ -478,7 +484,7 @@ L<!DOCTYPE html>
                 console.log("Poll quesiton is: " + poll.question);
                 
                 logPoll(poll);
-                
+
                 return;
             }
             if(data.type ==="PollUpdate"){
