@@ -470,11 +470,11 @@ L<!DOCTYPE html>
                 const poll = data.polldata;
                 console.log("Poll quesiton is: " + poll.question);
                 
-                logPoll(event.data);
+                logPoll(poll);
                 return;
             }
             if(data.type ==="PollUpdate"){
-                logPoll(event.data);
+                updatePoll(data);
                 return;
             }
 
