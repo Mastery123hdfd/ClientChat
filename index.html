@@ -250,9 +250,10 @@ L<!DOCTYPE html>
    
     
     
-    function log(text, type = "chat") {
+    function log(text, type = "chat",msgid) {
         const p = document.createElement("p");
         p.textContent = text;
+        p.id = "chat-"+msgid;
         if (type === "system") {
             p.classList.add("system");
         } else {
@@ -273,6 +274,7 @@ L<!DOCTYPE html>
         let totalvotes = k;
 
         p.id = "poll-" + PollObject.msgid;
+
         p.classList.add("chat");
         for(key of keyarray){
             totalvotes += opmap.get(key).optionvotes;
@@ -284,6 +286,7 @@ L<!DOCTYPE html>
             btn.className = "btn";
             p.appendChild(btn);
         }
+        logBox.appendChild(p);
     }
     function updatePoll(PollObject) {
         const pollDiv = document.getElementById("poll-" + PollObject.msgid);
@@ -320,9 +323,10 @@ L<!DOCTYPE html>
         }
     }
 
-    function logFile(buffer, type, name) {
+    function logFile(buffer, type, name,msgid) {
         const p = document.createElement("p");
         p.classList.add("chat");
+        p.id = msgid;
 
         // Optional: show image preview if it's an image
         if (type.startsWith("image/")) {
@@ -439,12 +443,12 @@ L<!DOCTYPE html>
             if (event.data instanceof ArrayBuffer) {
                 if (meta === null) {
                     console.log("Binary received but no meta! The file has been converted to a .bin file, please ask the sender for the file extension.");
-                    logFile(event.data, "application/octet-stream", "unknown");
+                    logFile(event.data, "application/octet-stream", "unknown", "NO-TAG-FOUND -- Type: File");
                     return;
                 }
                 console.log("Data Received!!!");
 
-                logFile(event.data, meta.type, meta.name);
+                logFile(event.data, meta.type, meta.name, "File-"+meta.id);
                 meta = null;
 
                 /*if(stackBuffer.length !== 0){
@@ -516,7 +520,7 @@ L<!DOCTYPE html>
             }
             else{
                 const output = data.message;
-                log("" + output, "chat");
+                log("" + output, "chat",data.msgid);
             }
 
         } catch(e){
