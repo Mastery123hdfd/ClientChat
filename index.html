@@ -97,12 +97,51 @@ L<!DOCTYPE html>
         .dropup-item:hover {
             background: #555;
         }
+        #customPrompt {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        #promptBox {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            font-family: sans-serif;
+        }
+        #promptBox input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+        }
+        #promptButtons {
+            margin-top: 15px;
+            text-align: right;
+        }
+        #promptButtons button {
+            padding: 6px 12px;
+        }
 
 
 
     </style>
 </head>
 <body>
+
+    <div id="customPrompt">
+        <div id="promptBox">
+            <div id="promptMessage"></div>
+            <input id="promptInput" type="text">
+            <div id="promptButtons">
+                <button id="promptCancel">Cancel</button>
+                <button id="promptOk">OK</button>
+            </div>
+        </div>
+    </div>
 
 <h2>WebSocket Client</h2>
 
@@ -113,6 +152,7 @@ L<!DOCTYPE html>
 <div id="plusMenu" class="dropup-menu">
     <button class="dropup-item" onclick="openPollCreator()">Create Poll</button>
     <button class="dropup-item" onclick="fileSelector()">Upload File</button>
+    <button class="dropup-item" onclick="IntializeDMSelection()">DM Selection</button>
 </div>
 
 <input type = "file" id = "fileBox" style = "display:none" onchange="handleSel(event)">
@@ -156,6 +196,8 @@ L<!DOCTYPE html>
     let bool1 = false;
     let bool2 = false;
 
+    let UserList = "";
+
     ws.binaryType = "arraybuffer";
     
     let prtag = "main";
@@ -182,6 +224,29 @@ L<!DOCTYPE html>
     function fileSelector(){
         fileBox.click();
     }
+    function customPrompt(message) {
+        return new Promise((resolve) => {
+            const overlay = document.getElementById("customPrompt");
+            const msg = document.getElementById("promptMessage");
+            const input = document.getElementById("promptInput");
+
+            msg.textContent = message;
+            input.value = "";
+
+            overlay.style.display = "flex";
+            input.focus();
+
+            document.getElementById("promptOk").onclick = () => {
+                overlay.style.display = "none";
+                resolve(input.value);
+            };
+
+            document.getElementById("promptCancel").onclick = () => {
+                overlay.style.display = "none";
+                resolve(null);
+            };
+        });
+    }
     function togglePlusMenu() {
         const menu = document.getElementById("plusMenu");
         menu.style.display = (menu.style.display === "block") ? "none" : "block";
@@ -199,15 +264,15 @@ L<!DOCTYPE html>
         });
     function openPollCreator() {
         
-        const title = prompt("Poll question:");
+        const title = customPrompt("Poll question:");
         boole = true;
         if (!title) return;
 
-        const options = prompt("Options (comma separated):");
+        const options = customPrompt("Options (comma separated):");
         bool1 = true;
         if (!options) return;
 
-        const timer = prompt("Timer in minutes:");
+        const timer = customPrompt("Timer in minutes:");
         bool2= true;
         if (!timer) return;
 
@@ -219,7 +284,16 @@ L<!DOCTYPE html>
         }));
     }
 
+    async function IntializeDMSelection() {
+        const dmUser = customPrompt("Enter the username of the person you want to DM:");
+        
+        if (!dmUser) return;
 
+        ws.send(JSON.stringify({
+            type: "initDM",
+            v1: dmUser
+        }));
+    }
     function handleSel(e) {
         const files = e.target.files;
         
@@ -515,6 +589,10 @@ L<!DOCTYPE html>
                 localStorage.setItem("sessionToken", data.tokenid);
                 return;
             }
+            else if(data.type =="userList"){
+                UserList = data.v1;
+                return;
+            }
             else if(data.type == "imgmeta"){
                 meta = {
                     name: data.name,
@@ -555,6 +633,13 @@ L<!DOCTYPE html>
         log("WebSocket error");
         console.error(err);
     };
+
+    async function getUserList(){
+        ws.send(JSON.stringify({
+            type: "getuserlist"
+        }))
+    }
+
 
     async function sendMessage() {
         
