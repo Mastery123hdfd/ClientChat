@@ -174,10 +174,12 @@ L<!DOCTYPE html>
 <script>
     
     console.log("SCRIPT LOADED", Date.now());
+    //CHANGE LINK HERE
+    const link = "wss://clientservertestexp.onrender.com"
 
     const logBox = document.getElementById("log");
     
-    const ws = new WebSocket("wss://clientservertestexp.onrender.com");
+    const ws = new WebSocket(link);
     
     const box = document.getElementById("msg");
     const btn = document.getElementById("clickbutton");
